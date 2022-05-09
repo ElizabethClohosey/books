@@ -14,8 +14,7 @@ class Results extends Component {
     const key = process.env.REACT_APP_BOOKS_API_KEY;
 
     const url =
-      `https://www.googleapis.com/books/v1/volumes?q=${searchValue}&key=
-      `
+      `https://www.googleapis.com/books/v1/volumes?q=${searchValue}&key=`
 
     fetch(url)
       .then((result) => result.json())
@@ -30,12 +29,9 @@ class Results extends Component {
 
   render() {
     const { data, items } = this.state
-    const volumeInfo = items.volumeInfo;
-    console.log(items)
 
     return (
       items.map((item, index) => (
-
         <div key={index} className="results-card" >
           <div className="card-image" style={{ minHeight: "40%", textAlign: 'center' }}>
 
@@ -53,7 +49,7 @@ class Results extends Component {
 
             <p><strong>Description:</strong>{item.volumeInfo.description}</p>
           </div>
-{/* 
+          {/* 
           <div className="card-footer">
             <button>+</button>
             <button>More</button>
