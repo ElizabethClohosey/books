@@ -1,34 +1,68 @@
 import React, { Component } from 'react'
+import defaultImage from './images/default-image.png';
 
-class App extends Component {
+class Results extends Component {
   state = {
-    data: [],
+    // data: {},
+    items: [],
   }
 
   // Code is invoked after the component is mounted/inserted into the DOM tree.
   componentDidMount() {
-    let searchValue = "OAR"
+    console.log("Component did update")
+    let searchValue = this.props.searchValue;
+    const key = process.env.REACT_APP_BOOKS_API_KEY;
+
     const url =
-      `https://en.wikipedia.org/w/api.php?action=opensearch&search=${searchValue}&format=json&origin=*`
+      `https://www.googleapis.com/books/v1/volumes?q=${searchValue}&key=
+      `
 
     fetch(url)
       .then((result) => result.json())
       .then((result) => {
         this.setState({
-          data: result,
+          // data: result,
+          items: result.items,
         })
       })
   }
 
+
   render() {
-    const { data } = this.state
+    const { data, items } = this.state
+    const volumeInfo = items.volumeInfo;
+    console.log(items)
 
-    const result = data.map((entry, index) => {
-      return <li key={index}>{entry}</li>
-    })
+    return (
+      items.map((item, index) => (
 
-    return <ul>{result}</ul>
+        <div key={index} className="results-card" >
+          <div className="card-image" style={{ minHeight: "40%", textAlign: 'center' }}>
+
+            {!item.volumeInfo.imageLinks ? (
+              <img src={defaultImage}></img>
+            ) : (
+              <img src={item.volumeInfo.imageLinks.smallThumbnail} alt="#" style={{ height: '150px', width: '100px' }} ></img>
+            )}
+          </div>
+
+          <div className="card-body">
+            <p ><strong>{item.volumeInfo.title}</strong> </p>
+            <p><strong>Author: </strong>{item.volumeInfo.authors}</p>
+            {/* <a>Description</a> */}
+
+            <p><strong>Description:</strong>{item.volumeInfo.description}</p>
+          </div>
+{/* 
+          <div className="card-footer">
+            <button>+</button>
+            <button>More</button>
+            <button>-</button>
+          </div> */}
+        </div >
+      ))
+    )
   }
 }
 
-export default App
+export default Results
